@@ -13,7 +13,7 @@ public class OrderBook {
 
     public void post(Order addition) {
 
-        if (addition.getType() == "ask") {
+        if (addition.getType().equals("ask")) {
             matchAsk(addition);
         } else {
             matchBid(addition);
@@ -48,7 +48,7 @@ public class OrderBook {
                 history.add(new Trade(order, priority.first));
                 if (order.getQuantity() < priority.first.getQuantity()) {
                     priority.first.setQuantity(priority.first.getQuantity() - order.getQuantity());
-                } else if (order.getQuantity() == priority.first.getQuantity()) {
+                } else if (order.getQuantity().equals(priority.first.getQuantity())) {
                     priority.removeFirst();
                 } else {
                     order.setQuantity(order.getQuantity() - priority.first.getQuantity());
@@ -112,7 +112,7 @@ public class OrderBook {
                 history.add(new Trade(order, priority.first));
                 if (order.getQuantity() < priority.first.getQuantity()) {
                     priority.first.setQuantity(priority.first.getQuantity() - order.getQuantity());
-                } else if (order.getQuantity() == priority.first.getQuantity()) {
+                } else if (order.getQuantity().equals(priority.first.getQuantity())) {
                     priority.removeFirst();
                 } else {
                     order.setQuantity(order.getQuantity() - priority.first.getQuantity());
@@ -142,7 +142,7 @@ public class OrderBook {
         level.cancel(id);
 
         if (level.getVolume() == 0) {
-            if (smallestAsk == level.getPrice()) {
+            if (smallestAsk.equals(level.getPrice())) {
                 if (level.right != null) {
                     Level curr = level.right;
                     while (curr.left != null) {
@@ -154,7 +154,7 @@ public class OrderBook {
                 } else {
                     smallestAsk = null;
                 }
-            } else if (highestBid == level.getPrice()) {
+            } else if (highestBid.equals(level.getPrice())) {
                 if (level.left != null) {
                     Level curr = level.left;
                     while (curr.right != null) {
@@ -172,9 +172,7 @@ public class OrderBook {
     }
 
     public void getMarketDemandBids(Level node) {
-        if (node == null) {
-            return;
-        } else {
+        if (node != null) {
             getMarketDemandBids(node.right);
             if (node.getVolume() > 0) {
                 System.out.println("Price: " + node.getPrice() + " Volume: " + node.getVolume());
@@ -184,9 +182,7 @@ public class OrderBook {
     }
 
     public void getMarketDemandAsks(Level node) {
-        if (node == null) {
-            return;
-        } else {
+        if (node != null) {
             getMarketDemandBids(node.left);
             if (node.getVolume() > 0) {
                 System.out.println("Price: " + node.getPrice() + " Volume: " + node.getVolume());
@@ -198,7 +194,7 @@ public class OrderBook {
     public void getMarketDemand() {
         System.out.println("Asks:");
         getMarketDemandAsks(OrderBook.rootAsks);
-        System.out.println("");
+        System.out.println();
         System.out.println("Bids:");
         getMarketDemandBids(OrderBook.rootBids);
     }
